@@ -19,7 +19,7 @@ class ComparerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function the_result_should_contain_the_value_of_the_first_input_if_the_second_input_is_empty()
+    public function it_should_work_for_flat_arrays_with_one_value()
     {
         $comparer = new \DeepCompare\Comparer();
 
@@ -36,4 +36,59 @@ class ComparerTest extends PHPUnit_Framework_TestCase
         $result = $comparer->compare($array1, $array2);
         $this->assertEquals($expectedResult, $result);
     }
+
+    /**
+     * @test
+     */
+    public function it_should_work_for_flat_arrays_with_two_values()
+    {
+        $comparer = new \DeepCompare\Comparer();
+
+        $array1 = array(
+            'key1' => 'value1',
+            'key2' => 'value2'
+        );
+        $array2 = array();
+
+        $expectedResult = array(
+            'key1' => array(
+                'In old but not in new version',
+                'value1'
+            ),
+            'key2' => array(
+                'In old but not in new version',
+                'value2'
+            )
+        );
+
+        $result = $comparer->compare($array1, $array2);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_work_for_nested_arrays()
+    {
+        $comparer = new \DeepCompare\Comparer();
+
+        $array1 = array(
+            'key1' => array(
+                'key2' => 'value2'
+            )
+        );
+        $array2 = array();
+
+        $expectedResult = array(
+            'key1' => array(
+                'In old but not in new version',
+                'Array(...)'
+            )
+        );
+
+        $result = $comparer->compare($array1, $array2);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+
 }
